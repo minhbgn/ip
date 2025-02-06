@@ -1,4 +1,5 @@
 package Main;
+import java.util.Scanner;
 
 public class Roboast {
     private static final String BOT_NAME = "Roboast";
@@ -6,6 +7,7 @@ public class Roboast {
 
     public static void main(String[] args) {
         printHello();
+        echo();
         printGoodbye();
     }
 
@@ -21,4 +23,15 @@ public class Roboast {
         System.out.println(LINE);
     }
 
+    public static void echo(){
+        String echo;
+        Scanner sc = new Scanner(System.in);
+        echo = sc.nextLine();
+        while (!echo.equals("bye")){
+            System.out.println("REPEATING COMMANDS: ");
+            System.out.println(LINE + "\n" + echo + "\n" + LINE);
+            echo = sc.nextLine();
+        }
+        System.out.println(LINE);
+    }
 }
