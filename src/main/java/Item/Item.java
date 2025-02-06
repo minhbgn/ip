@@ -1,8 +1,8 @@
 package Item;
 
 public class Item {
-    private String name;
-    private boolean done;
+    protected String name;
+    protected boolean done;
 
     public Item(){
         name = "NO NAME";
@@ -22,6 +22,10 @@ public class Item {
         this.name = name;
     }
 
+    public boolean isDone() {
+        return done;
+    }
+
     public void mark(boolean done) {
         this.done = done;
     }
@@ -29,10 +33,10 @@ public class Item {
     @Override
     public String toString() {
         if (done){
-            return "[X]" + name;
+            return "[X] " + name;
         }
         else{
-            return "[ ]" + name;
+            return "[ ] " + name;
         }
     }
 }

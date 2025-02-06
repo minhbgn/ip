@@ -1,32 +1,36 @@
 package Main;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-import java.util.List;
 import Item.Item;
+import Item.Todo;
+import Item.Event;
+import Item.Deadline;
 
 public class Roboast {
     private static final String BOT_NAME = "Roboast";
     private static final String LINE = "_".repeat(50);
+    private static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll"};
 
-    public static void main(String[] args) {
+    public void start() {
         printHello();
         itemManage();
         printGoodbye();
     }
 
-    public static void printHello(){
+    public void printHello(){
         System.out.println(LINE);
         System.out.println("Hello! I'm " + BOT_NAME + "!");
         System.out.println("What can I do for you?");
         System.out.println(LINE);
     }
 
-    public static void printGoodbye(){
+    public void printGoodbye(){
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(LINE);
     }
 
-    public static void echo(){
+    public void echo(){
         Scanner sc = new Scanner(System.in);
         String echo;
         echo = sc.nextLine();
@@ -38,69 +42,115 @@ public class Roboast {
         System.out.println(LINE);
     }
 
-    public static void itemManage(){
+    public void itemManage(){
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
-        List<Item> itemList = new ArrayList<>();
+        ArrayList<Item> itemList = new ArrayList<>();
         while (!input.equals("bye")) {
-            if (input.equals("list")) {
-                System.out.println(LINE);
-                for (int i = 0; i < itemList.size(); i++) {
-                    System.out.println(i + 1 + ". " + itemList.get(i));
+            int space = input.indexOf(' ');
+            if (space > 0 && space < input.length() - 1) {
+                String command = input.substring(0, space);
+                String content = input.substring(space+1);
+                if (command.equals("mark")){
+                    marked(itemList, content, true);
                 }
-            }
-            else if (input.contains("mark")){
-                String posString = input.substring(input.indexOf(" ")+1);
-                try{
-                    int posInt = Integer.parseInt(posString);
-                    Item item = itemList.get(posInt-1);
-                    if (input.contains("unmark")){
-                        item.mark(false);
-                        System.out.println(LINE);
-                        System.out.println("marked: " + item.getName() + "\n" + LINE);
-                    }
-                    else{
-                        item.mark(true);
-                        System.out.println(LINE);
-                        System.out.println("unmarked: " + item.getName() + "\n" + LINE);
-                    }
+                else if (command.equals("unmark")){
+                    marked(itemList, content, false);
                 }
-                catch (Exception e){
-                    if (itemList.isEmpty()){
-                        System.out.println(LINE);
-                        System.out.println("Please add an item before marking!");
-                        System.out.println("What else do you want to do?");
-                        System.out.println(LINE);
-                        input = sc.nextLine();
-                        continue;
-                    }
+                else if (command.equals("todo")){
                     System.out.println(LINE);
-                    System.out.println("Incorrect format for command \"mark\" or \"unmark\"");
-                    System.out.println("Correct format for command \"mark\" is \"mark {Positive Integer}\", max = " + (itemList.size()));
-                    System.out.println("Correct format for command \"unmark\" is \"unmark {Positive Integer}\", max = " + (itemList.size()));
-                    System.out.println("Would you want to add " + input + " to the list?");
-                    System.out.println("Choose Y or N");
-                    String answer = sc.nextLine();
-                    while (!answer.equals("Y") & !answer.equals("N")){
-                        System.out.println("Choose Y or N only");
-                        answer = sc.nextLine();
-                    }
-                    if (answer.equals("Y")){
-                        Item item = new Item(input, false);
-                        itemList.add(item);
-                        System.out.println(LINE + "\n added: " + item.getName() + "\n" + LINE);
-                    }
-                    System.out.println("What else do you want to do?");
+                    Item item = new Todo(content, false);
+                    itemList.add(item);
+                    System.out.println("added: " + item.getName() + "\n" +
+                                        "You now have " + itemList.size() + " tasks\n" + LINE);
                 }
+                else if (command.equals("deadline")){
+                    System.out.println(LINE);
+                    Item item = new Deadline(content, false);
+                    itemList.add(item);
+                    System.out.println("added: " + item.getName() + "\n" +
+                                        "You now have " + itemList.size() + " tasks\n" + LINE);
+                }
+                else if (command.equals("event")){
+                    System.out.println(LINE);
+                    Item item = new Event(content, false);
+                    itemList.add(item);
+                    System.out.println("added: " + item.getName() + "\n" +
+                                        "You now have " + itemList.size() + " tasks\n" + LINE);
+                }
+                else{
+                    System.out.println(LINE);
+                    System.out.println("I don't understand this command");
+                    System.out.println("Please choose from the following commands: ");
+                    System.out.println(Arrays.toString(COMMAND_LIST));
+                    System.out.println(LINE);
+                }
+                input = sc.nextLine();
             }
             else{
-                System.out.println(LINE);
-                Item item = new Item(input, false);
-                itemList.add(item);
-                System.out.println("added: " + item.getName() + "\n" + LINE);
+                if (input.equals("list")) {
+                    System.out.println(LINE);
+                    for (int i = 0; i < itemList.size(); i++) {
+                        System.out.println(i + 1 + ". " + itemList.get(i));
+                    }
+                    System.out.println(LINE);
+                }
+                else if (input.equals("deleteAll")){
+                    int i = 0;
+                    while (i < itemList.size()) {
+                        if (itemList.get(i).isDone()){
+                            itemList.remove(i);
+                        }
+                        else{
+                            i = i + 1;
+                        }
+                    }
+                    System.out.println(LINE);
+                    System.out.println("All marked items have been deleted");
+                    System.out.println(LINE);
+                }
+                else{
+                    System.out.println(LINE);
+                    System.out.println("I don't understand this command");
+                    System.out.println("Please choose from the following commands: ");
+                    System.out.println(Arrays.toString(COMMAND_LIST));
+                    System.out.println(LINE);
+                }
+                input = sc.nextLine();
             }
-            input = sc.nextLine();
+
         }
         System.out.println(LINE);
+    }
+
+    public void marked(ArrayList<Item> itemList, String content, boolean isDone){
+        try{
+            int posInt = Integer.parseInt(content);
+            Item item = itemList.get(posInt-1);
+            if (isDone){
+                item.mark(true);
+                System.out.println(LINE);
+                System.out.println("marked: " + item.getName() + "\n" + LINE);
+            }
+            else{
+                item.mark(false);
+                System.out.println(LINE);
+                System.out.println("unmarked: " + item.getName() + "\n" + LINE);
+            }
+        }
+        catch (Exception e){
+            if (itemList.isEmpty()){
+                System.out.println(LINE);
+                System.out.println("Please add an item before marking!");
+                System.out.println("What else do you want to do?");
+                System.out.println(LINE);
+                return;
+            }
+            System.out.println(LINE);
+            System.out.println("Incorrect format for command \"mark\" or \"unmark\"");
+            System.out.println("Correct format for command \"mark\" is \"mark {Positive Integer}\", max = " + (itemList.size()));
+            System.out.println("Correct format for command \"unmark\" is \"unmark {Positive Integer}\", max = " + (itemList.size()));
+            System.out.println("What else do you want to do?");
+        }
     }
 }
