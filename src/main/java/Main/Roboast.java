@@ -10,7 +10,7 @@ import Item.Deadline;
 public class Roboast {
     private static final String BOT_NAME = "Roboast";
     private static final String LINE = "_".repeat(50);
-    private static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll"};
+    private static final String[] COMMAND_LIST = {"list","setDone","unmark","todo","deadline","event","deleteAll"};
 
     private final ArrayList<Item> itemList = new ArrayList<Item>();
 
@@ -45,7 +45,7 @@ public class Roboast {
             if (foundSpace && !isSpaceAtEnd) {
                 String command = input.substring(0, space);
                 String content = input.substring(space+1);
-                if (command.equals("mark")){
+                if (command.equals("setDone")){
                     mark(content, true);
                 }
                 else if (command.equals("unmark")){
@@ -89,12 +89,12 @@ public class Roboast {
             Item item = itemList.get(posInt-1);
 
             if (isDone){
-                item.mark(true);
+                item.setDone(true);
                 System.out.println(LINE);
-                System.out.println("mark: " + item.getName() + "\n" + LINE);
+                System.out.println("setDone: " + item.getName() + "\n" + LINE);
             }
             else{
-                item.mark(false);
+                item.setDone(false);
                 System.out.println(LINE);
                 System.out.println("unmarked: " + item.getName() + "\n" + LINE);
             }
@@ -110,8 +110,8 @@ public class Roboast {
             }
 
             System.out.println(LINE);
-            System.out.println("Incorrect format for command \"mark\" or \"unmark\"");
-            System.out.println("Correct format for command \"mark\" is \"mark {Positive Integer}\", max = " + (itemList.size()));
+            System.out.println("Incorrect format for command \"setDone\" or \"unmark\"");
+            System.out.println("Correct format for command \"setDone\" is \"setDone {Positive Integer}\", max = " + (itemList.size()));
             System.out.println("Correct format for command \"unmark\" is \"unmark {Positive Integer}\", max = " + (itemList.size()));
             System.out.println("What else do you want to do?");
         }
@@ -169,7 +169,7 @@ public class Roboast {
         }
 
         System.out.println(LINE);
-        System.out.println("All mark items have been deleted");
+        System.out.println("All setDone items have been deleted");
         System.out.println(LINE);
     }
 }

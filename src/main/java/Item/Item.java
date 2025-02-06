@@ -26,7 +26,7 @@ public class Item {
         return done;
     }
 
-    public void mark(boolean done) {
+    public void setDone(boolean done) {
         this.done = done;
     }
 
