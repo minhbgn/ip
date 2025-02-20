@@ -153,6 +153,12 @@ public class ItemManage {
     }
 
     public void showItemList() {
+        if (itemList.isEmpty()){
+            System.out.println(LINE);
+            System.out.println("List is empty");
+            System.out.println(LINE);
+            return;
+        }
         System.out.println(LINE);
         for (int i = 0; i < itemList.size(); i++) {
             System.out.println(i + 1 + ". " + itemList.get(i));

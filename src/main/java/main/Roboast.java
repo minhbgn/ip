@@ -2,6 +2,7 @@ package main;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import diskIO.CSVFileHandler;
 import exception.RoboastException;
 import item.Item;
 import item.ItemManage;
@@ -11,12 +12,20 @@ public class Roboast {
     private static final String LINE = "_".repeat(50);
     private static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll"};
 
-    private final ArrayList<Item> itemList = new ArrayList<Item>();
+    private ArrayList<Item> itemList = new ArrayList<>();
 
     public void start() {
+
+        try {
+            itemList = CSVFileHandler.loadFromCSV("./data/roboast.csv");
+        }
+        catch (Exception e) {
+
+        }
         printHello();
         itemManage();
         printGoodbye();
+        CSVFileHandler.saveToCSV("./data/roboast.csv", itemList);
     }
 
     public void printHello() {
@@ -47,6 +56,7 @@ public class Roboast {
                 itemManager.showCommandError();
             }
             input = sc.nextLine();
+            CSVFileHandler.saveToCSV("./data/roboast.csv", itemList);
         }
 
     }
