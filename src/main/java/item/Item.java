@@ -1,42 +1,42 @@
 package item;
 
 public class Item {
-    protected String name;
-    protected boolean done;
+    protected String itemName;
+    protected boolean isDone;
 
     public Item(){
-        name = "NO NAME";
-        done = false;
+        itemName = "NO NAME";
+        isDone = false;
     }
 
-    public Item(String name, boolean done) {
-        this.name = name;
-        this.done = done;
+    public Item(String name, boolean isDone) {
+        this.itemName = name;
+        this.isDone = isDone;
     }
 
-    public String getName() {
-        return name;
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     public boolean isDone() {
-        return done;
+        return isDone;
     }
 
     public void setDone(boolean done) {
-        this.done = done;
+        this.isDone = done;
     }
 
     @Override
     public String toString() {
-        if (done){
-            return "[X] " + name;
+        if (isDone){
+            return "[X] " + itemName;
         }
         else{
-            return "[ ] " + name;
+            return "[ ] " + itemName;
         }
     }
 }

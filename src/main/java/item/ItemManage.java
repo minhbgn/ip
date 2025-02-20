@@ -18,45 +18,47 @@ public class ItemManage {
 
         String command;
         String content;
-        int space = input.indexOf(' ');
+        int spaceIndex = input.indexOf(' ');
 
         try {
-            command = input.substring(0, space);
-            content = input.substring(space + 1);
+            command = input.substring(0, spaceIndex);
+            content = input.substring(spaceIndex + 1);
         }
         catch (IndexOutOfBoundsException e) {
             command = input;
             content = "";
         }
-        if (command.equals("mark")){
+        if (command.equals("mark")) {
             mark(content, true);
         }
-        else if (command.equals("unmark")){
+        else if (command.equals("unmark")) {
             mark(content, false);
         }
-        else if (command.equals("todo")){
+        else if (command.equals("todo")) {
             addTodo(content);
         }
-        else if (command.equals("deadline")){
+        else if (command.equals("deadline")) {
             addDeadlines(content);
         }
-        else if (command.equals("event")){
+        else if (command.equals("event")) {
             addEvents(content);
         }
-        else if (input.equals("list")) {
+        else if (command.equals("list")) {
             showItemList();
         }
-        else if (input.equals("deleteAll")){
+        else if (command.equals("deleteAll")) {
             deleteAll();
         }
-        else{
+        else if (command.equals("delete")) {
+            delete(content);
+        }
+        else {
             throw new RoboastException("Invalid command");
         }
 
-        System.out.println(LINE);
     }
 
-    public void mark(String content, boolean isDone){
+    public void mark(String content, boolean isDone) {
         try{
             int posInt = Integer.parseInt(content);
             Item item = itemList.get(posInt-1);
@@ -64,17 +66,17 @@ public class ItemManage {
             if (isDone){
                 item.setDone(true);
                 System.out.println(LINE);
-                System.out.println("setDone: " + item.getName() + "\n" + LINE);
+                System.out.println("setDone: " + item.getItemName() + "\n" + LINE);
             }
             else{
                 item.setDone(false);
                 System.out.println(LINE);
-                System.out.println("unmarked: " + item.getName() + "\n" + LINE);
+                System.out.println("unmarked: " + item.getItemName() + "\n" + LINE);
             }
         }
 
         catch (Exception e){
-            if (itemList.isEmpty()){
+            if (itemList.isEmpty()) {
                 System.out.println(LINE);
                 System.out.println("Please add an item before marking!");
                 System.out.println("What else do you want to do?");
@@ -90,53 +92,53 @@ public class ItemManage {
         }
     }
 
-    public void addTodo(String content){
+    public void addTodo(String content) {
         if (content.isEmpty()){
-            showListEmptyError();
+            showAddEmptyError();
             return;
         }
         System.out.println(LINE);
         Item item = new Todo(content, false);
         itemList.add(item);
-        System.out.println("added: " + item.getName() + "\n" +
+        System.out.println("added: " + item.getItemName() + "\n" +
                 "You now have " + itemList.size() + " tasks\n" + LINE);
     }
 
-    public void addDeadlines(String content){
+    public void addDeadlines(String content) {
         if (content.isEmpty()){
-            showListEmptyError();
+            showAddEmptyError();
             return;
         }
         System.out.println(LINE);
         Item item = new Deadline(content, false);
         itemList.add(item);
-        System.out.println("added: " + item.getName() + "\n" +
+        System.out.println("added: " + item.getItemName() + "\n" +
                 "You now have " + itemList.size() + " tasks\n" + LINE);
     }
 
-    public void addEvents(String content){
-        if (content.isEmpty()){
-            showListEmptyError();
+    public void addEvents(String content) {
+        if (content.isEmpty()) {
+            showAddEmptyError();
             return;
         }
         System.out.println(LINE);
         Item item = new Event(content, false);
         itemList.add(item);
-        System.out.println("added: " + item.getName() + "\n" +
+        System.out.println("added: " + item.getItemName() + "\n" +
                 "You now have " + itemList.size() + " tasks\n" + LINE);
     }
 
-    public void showListEmptyError(){
-        try{
+    public void showAddEmptyError() {
+        try {
             throw new RoboastException("Errr I do not know what to add.");
         }
-        catch (RoboastException e){
+        catch (RoboastException e) {
             System.out.println(LINE);
             System.out.println(e.getMessage());
             System.out.println("Please include what you want to add after the command in the format 'command content'");
         }
     }
-    public void showCommandError(){
+    public void showCommandError() {
         try{
             throw new RoboastException("Oops, I don't understand the command.");
         }
@@ -150,7 +152,7 @@ public class ItemManage {
         System.out.println(LINE);
     }
 
-    public void showItemList(){
+    public void showItemList() {
         System.out.println(LINE);
         for (int i = 0; i < itemList.size(); i++) {
             System.out.println(i + 1 + ". " + itemList.get(i));
@@ -158,7 +160,7 @@ public class ItemManage {
         System.out.println(LINE);
     }
 
-    public int countDone(){
+    public int countDone() {
         int i = 0;
         while (i < itemList.size()) {
             if (itemList.get(i).isDone()){
@@ -168,18 +170,18 @@ public class ItemManage {
         return i;
     }
 
-    public void deleteAll(){
+    public void deleteAll() {
 
         try{
-            if (itemList.isEmpty()){
+            if (itemList.isEmpty()) {
                 throw new RoboastException("List is empty");
             }
 
-            else if (countDone() == 0){
+            else if (countDone() == 0) {
                 throw new RoboastException("All setDone items have been deleted");
             }
         }
-        catch (RoboastException e){
+        catch (RoboastException e) {
             System.out.println(e);
             return;
         }
@@ -197,5 +199,34 @@ public class ItemManage {
         System.out.println(LINE);
         System.out.println("All setDone items have been deleted");
         System.out.println(LINE);
+    }
+
+    public void delete(String content) {
+        try {
+            if (content.isEmpty()){
+                throw new RoboastException("Errr I don't know what to delete");
+            }
+            Integer.parseInt(content);
+            Item item = itemList.get(Integer.parseInt(content) - 1);
+            itemList.remove(Integer.parseInt(content) - 1);
+            System.out.println(LINE);
+            System.out.println("Item deleted successfully: " + item.getItemName() + "\n" + LINE);
+        }
+        catch (NumberFormatException e) {
+            System.out.println(LINE);
+            System.out.println("Please use an integer after the delete command as in the format 'delete integer'");
+            System.out.println(LINE);
+        }
+        catch (RoboastException e) {
+            System.out.println(LINE);
+            System.out.println(e.getMessage());
+            System.out.println("Please include what you want to delete");
+            System.out.println(LINE);
+        }
+        catch (IndexOutOfBoundsException e) {
+            System.out.println(LINE);
+            System.out.println("Please choose a number in the range 1 to " + itemList.size() + ".");
+            System.out.println(LINE);
+        }
     }
 }

@@ -12,11 +12,11 @@ public class Todo extends Item{
 
     @Override
     public String toString(){
-        if (super.done){
-            return "[T][X] " + super.name;
+        if (super.isDone){
+            return "[T][X] " + super.itemName;
         }
         else{
-            return "[T][ ] " + super.name;
+            return "[T][ ] " + super.itemName;
         }
     }
 

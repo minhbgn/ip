@@ -19,30 +19,30 @@ public class Roboast {
         printGoodbye();
     }
 
-    public void printHello(){
+    public void printHello() {
         System.out.println(LINE);
         System.out.println("Hello! I'm " + BOT_NAME + "!");
         System.out.println("What can I do for you?");
         System.out.println(LINE);
     }
 
-    public void printGoodbye(){
+    public void printGoodbye() {
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println(LINE);
     }
 
-    public void itemManage(){
+    public void itemManage() {
 
         ItemManage itemManager = new ItemManage(itemList);
 
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
 
-        while (!input.equals("bye")){
-            try{
+        while (!input.equals("bye")) {
+            try {
                 itemManager.action(input);
             }
-            catch(RoboastException e){
+            catch(RoboastException e) {
                 System.out.println(e.getMessage());
                 itemManager.showCommandError();
             }

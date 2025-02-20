@@ -2,11 +2,11 @@ package item;
 
 public class Event extends Item{
 
-    public Event(){
+    public Event() {
         super();
     }
 
-    public Event(String name, boolean done){
+    public Event(String name, boolean done) {
         super(name, done);
         String newname;
         newname = name.replace("/from","(from:")
@@ -14,16 +14,16 @@ public class Event extends Item{
         if (!newname.equals(name)){
             newname = newname + ")";
         }
-        super.setName(newname);
+        super.setItemName(newname);
     }
 
     @Override
-    public String toString(){
-        if (super.done){
-            return "[E][X] " + super.name;
+    public String toString() {
+        if (super.isDone){
+            return "[E][X] " + super.itemName;
         }
         else{
-            return "[E][ ] " + super.name;
+            return "[E][ ] " + super.itemName;
         }
     }
 
