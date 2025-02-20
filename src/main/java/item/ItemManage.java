@@ -1,10 +1,6 @@
-package main;
+package item;
 
 import exception.RoboastException;
-import item.Deadline;
-import item.Event;
-import item.Item;
-import item.Todo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
