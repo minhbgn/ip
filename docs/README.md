@@ -1,4 +1,4 @@
-# Main.Roboast User Guide
+# main.Roboast User Guide
 
 // Update the title above to match the actual product name
 

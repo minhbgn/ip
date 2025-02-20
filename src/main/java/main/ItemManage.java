@@ -1,83 +1,60 @@
-package Main;
+package main;
+
+import exception.RoboastException;
+import item.Deadline;
+import item.Event;
+import item.Item;
+import item.Todo;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
-import Item.Item;
-import Item.Todo;
-import Item.Event;
-import Item.Deadline;
 
-public class Roboast {
-    private static final String BOT_NAME = "Roboast";
+public class ItemManage {
+    private final ArrayList<Item> itemList;
     private static final String LINE = "_".repeat(50);
-    private static final String[] COMMAND_LIST = {"list","setDone","unmark","todo","deadline","event","deleteAll"};
+    private static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll"};
 
-    private final ArrayList<Item> itemList = new ArrayList<Item>();
-
-    public void start() {
-        printHello();
-        itemManage();
-        printGoodbye();
+    public ItemManage(ArrayList<Item> itemList) {
+        this.itemList = itemList;
     }
 
-    public void printHello(){
-        System.out.println(LINE);
-        System.out.println("Hello! I'm " + BOT_NAME + "!");
-        System.out.println("What can I do for you?");
-        System.out.println(LINE);
-    }
+    public void action(String input) throws RoboastException {
 
-    public void printGoodbye(){
-        System.out.println("Bye. Hope to see you again soon!");
-        System.out.println(LINE);
-    }
+        String command;
+        String content;
+        int space = input.indexOf(' ');
 
-    public void itemManage(){
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-
-        while (!input.equals("bye")) {
-
-            int space = input.indexOf(' ');
-            boolean foundSpace = (space > 0);
-            boolean isSpaceAtEnd = (space == input.length() - 1);
-
-            if (foundSpace && !isSpaceAtEnd) {
-                String command = input.substring(0, space);
-                String content = input.substring(space+1);
-                if (command.equals("setDone")){
-                    mark(content, true);
-                }
-                else if (command.equals("unmark")){
-                    mark(content, false);
-                }
-                else if (command.equals("todo")){
-                    addTodo(content);
-                }
-                else if (command.equals("deadline")){
-                    addDeadlines(content);
-                }
-                else if (command.equals("event")){
-                    addEvents(content);
-                }
-                else{
-                    showCommandError();
-                }
-            }
-
-            else{
-                if (input.equals("list")) {
-                    showItemList();
-                }
-                else if (input.equals("deleteAll")){
-                    deleteAll();
-                }
-                else{
-                    showCommandError();
-                }
-            }
-
-            input = sc.nextLine();
+        try {
+            command = input.substring(0, space);
+            content = input.substring(space + 1);
+        }
+        catch (IndexOutOfBoundsException e) {
+            command = input;
+            content = "";
+        }
+        if (command.equals("mark")){
+            mark(content, true);
+        }
+        else if (command.equals("unmark")){
+            mark(content, false);
+        }
+        else if (command.equals("todo")){
+            addTodo(content);
+        }
+        else if (command.equals("deadline")){
+            addDeadlines(content);
+        }
+        else if (command.equals("event")){
+            addEvents(content);
+        }
+        else if (input.equals("list")) {
+            showItemList();
+        }
+        else if (input.equals("deleteAll")){
+            deleteAll();
+        }
+        else{
+            throw new RoboastException("Invalid command");
         }
 
         System.out.println(LINE);
@@ -118,6 +95,10 @@ public class Roboast {
     }
 
     public void addTodo(String content){
+        if (content.isEmpty()){
+            showListEmptyError();
+            return;
+        }
         System.out.println(LINE);
         Item item = new Todo(content, false);
         itemList.add(item);
@@ -126,6 +107,10 @@ public class Roboast {
     }
 
     public void addDeadlines(String content){
+        if (content.isEmpty()){
+            showListEmptyError();
+            return;
+        }
         System.out.println(LINE);
         Item item = new Deadline(content, false);
         itemList.add(item);
@@ -134,6 +119,10 @@ public class Roboast {
     }
 
     public void addEvents(String content){
+        if (content.isEmpty()){
+            showListEmptyError();
+            return;
+        }
         System.out.println(LINE);
         Item item = new Event(content, false);
         itemList.add(item);
@@ -141,7 +130,23 @@ public class Roboast {
                 "You now have " + itemList.size() + " tasks\n" + LINE);
     }
 
+    public void showListEmptyError(){
+        try{
+            throw new RoboastException("Errr I do not know what to add.");
+        }
+        catch (RoboastException e){
+            System.out.println(LINE);
+            System.out.println(e.getMessage());
+            System.out.println("Please include what you want to add after the command in the format 'command content'");
+        }
+    }
     public void showCommandError(){
+        try{
+            throw new RoboastException("Oops, I don't understand the command.");
+        }
+        catch (RoboastException e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println(LINE);
         System.out.println("I don't understand this command");
         System.out.println("Please choose from the following commands: ");
@@ -157,7 +162,32 @@ public class Roboast {
         System.out.println(LINE);
     }
 
+    public int countDone(){
+        int i = 0;
+        while (i < itemList.size()) {
+            if (itemList.get(i).isDone()){
+                i = i + 1;
+            }
+        }
+        return i;
+    }
+
     public void deleteAll(){
+
+        try{
+            if (itemList.isEmpty()){
+                throw new RoboastException("List is empty");
+            }
+
+            else if (countDone() == 0){
+                throw new RoboastException("All setDone items have been deleted");
+            }
+        }
+        catch (RoboastException e){
+            System.out.println(e);
+            return;
+        }
+
         int i = 0;
         while (i < itemList.size()) {
             if (itemList.get(i).isDone()){
