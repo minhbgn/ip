@@ -135,8 +135,9 @@ public class ItemManage {
             throw new RoboastException("Errr I do not know what to add.");
         }
         catch (RoboastException e){
+            System.out.println(LINE);
             System.out.println(e.getMessage());
-            System.out.println("Please follow the format: 'todo content' where content is what to add");
+            System.out.println("Please include what you want to add after the command in the format 'command content'");
         }
     }
     public void showCommandError(){

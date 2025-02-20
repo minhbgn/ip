@@ -1,13 +1,9 @@
 package main;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import exception.RoboastException;
 import item.Item;
-import item.Todo;
-import item.Event;
-import item.Deadline;
 
 public class Roboast {
     private static final String BOT_NAME = "Roboast";
