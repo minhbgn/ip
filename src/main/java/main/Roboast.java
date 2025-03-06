@@ -1,64 +1,30 @@
 package main;
-import java.util.ArrayList;
-import java.util.Scanner;
 
-import diskIO.CSVFileHandler;
-import exception.RoboastException;
-import item.Item;
-import item.ItemManage;
+import diskio.Storage;
+import item.TaskList;
+import ui.RoboastParser;
+import ui.UI;
 
 public class Roboast {
     private static final String BOT_NAME = "Roboast";
     private static final String LINE = "_".repeat(50);
-    private static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll"};
 
-    private ArrayList<Item> itemList = new ArrayList<>();
+    private UI ui;
+    private TaskList taskList;
+    private RoboastParser roboastParser;
 
     public void start() {
 
-        try {
-            itemList = CSVFileHandler.loadFromCSV("./data/roboast.csv");
-        }
-        catch (Exception e) {
+        taskList = new TaskList(Storage.loadFromCSV("./data/roboast.csv"));
+        ui = new UI();
+        roboastParser = new RoboastParser(taskList);
 
-        }
-        printHello();
-        itemManage();
-        printGoodbye();
-        CSVFileHandler.saveToCSV("./data/roboast.csv", itemList);
+        ui.printHello();
+        roboastParser.itemManage(taskList);
+        ui.printGoodbye();
+
+        Storage.saveToCSV("./data/roboast.csv", taskList.getItemList());
     }
 
-    public void printHello() {
-        System.out.println(LINE);
-        System.out.println("Hello! I'm " + BOT_NAME + "!");
-        System.out.println("What can I do for you?");
-        System.out.println(LINE);
-    }
-
-    public void printGoodbye() {
-        System.out.println("Bye. Hope to see you again soon!");
-        System.out.println(LINE);
-    }
-
-    public void itemManage() {
-
-        ItemManage itemManager = new ItemManage(itemList);
-
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-
-        while (!input.equals("bye")) {
-            try {
-                itemManager.action(input);
-            }
-            catch(RoboastException e) {
-                System.out.println(e.getMessage());
-                itemManager.showCommandError();
-            }
-            input = sc.nextLine();
-            CSVFileHandler.saveToCSV("./data/roboast.csv", itemList);
-        }
-
-    }
 
 }

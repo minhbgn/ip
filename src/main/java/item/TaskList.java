@@ -1,16 +1,19 @@
 package item;
 
 import exception.RoboastException;
+import ui.UI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ItemManage {
+public class TaskList {
     private final ArrayList<Item> itemList;
     private static final String LINE = "_".repeat(50);
-    private static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll"};
+    public static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll","delete"};
 
-    public ItemManage(ArrayList<Item> itemList) {
+    private UI ui = new UI();
+
+    public TaskList(ArrayList<Item> itemList) {
         this.itemList = itemList;
     }
 
@@ -94,7 +97,7 @@ public class ItemManage {
 
     public void addTodo(String content) {
         if (content.isEmpty()){
-            showAddEmptyError();
+            ui.showAddEmptyError();
             return;
         }
         System.out.println(LINE);
@@ -106,7 +109,7 @@ public class ItemManage {
 
     public void addDeadlines(String content) {
         if (content.isEmpty()){
-            showAddEmptyError();
+            ui.showAddEmptyError();
             return;
         }
         System.out.println(LINE);
@@ -118,7 +121,7 @@ public class ItemManage {
 
     public void addEvents(String content) {
         if (content.isEmpty()) {
-            showAddEmptyError();
+            ui.showAddEmptyError();
             return;
         }
         System.out.println(LINE);
@@ -126,30 +129,6 @@ public class ItemManage {
         itemList.add(item);
         System.out.println("added: " + item.getItemName() + "\n" +
                 "You now have " + itemList.size() + " tasks\n" + LINE);
-    }
-
-    public void showAddEmptyError() {
-        try {
-            throw new RoboastException("Errr I do not know what to add.");
-        }
-        catch (RoboastException e) {
-            System.out.println(LINE);
-            System.out.println(e.getMessage());
-            System.out.println("Please include what you want to add after the command in the format 'command content'");
-        }
-    }
-    public void showCommandError() {
-        try{
-            throw new RoboastException("Oops, I don't understand the command.");
-        }
-        catch (RoboastException e) {
-            System.out.println(e.getMessage());
-        }
-        System.out.println(LINE);
-        System.out.println("I don't understand this command");
-        System.out.println("Please choose from the following commands: ");
-        System.out.println(Arrays.toString(COMMAND_LIST));
-        System.out.println(LINE);
     }
 
     public void showItemList() {
@@ -234,5 +213,9 @@ public class ItemManage {
             System.out.println("Please choose a number in the range 1 to " + itemList.size() + ".");
             System.out.println(LINE);
         }
+    }
+
+    public ArrayList<Item> getItemList() {
+        return itemList;
     }
 }

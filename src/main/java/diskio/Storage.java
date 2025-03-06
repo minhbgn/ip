@@ -1,4 +1,4 @@
-package diskIO;
+package diskio;
 
 import item.Item;
 
@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 
-public class CSVFileHandler {
+public class Storage {
     public static void saveToCSV(String filename, ArrayList<Item> items) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
             for (Item item : items) {
