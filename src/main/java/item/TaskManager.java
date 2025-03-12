@@ -4,16 +4,15 @@ import exception.RoboastException;
 import ui.UI;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class TaskList {
-    private final ArrayList<Item> itemList;
+public class TaskManager {
     private static final String LINE = "_".repeat(50);
-    public static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll","delete"};
+    public static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll","delete","find"};
 
     private UI ui = new UI();
+    private final ArrayList<Item> itemList;
 
-    public TaskList(ArrayList<Item> itemList) {
+    public TaskManager(ArrayList<Item> itemList) {
         this.itemList = itemList;
     }
 
@@ -55,6 +54,9 @@ public class TaskList {
         else if (command.equals("delete")) {
             delete(content);
         }
+        else if (command.equals("find")){
+            findItem(content);
+        }
         else {
             throw new RoboastException("Invalid command");
         }
@@ -69,7 +71,7 @@ public class TaskList {
             if (isDone){
                 item.setDone(true);
                 System.out.println(LINE);
-                System.out.println("setDone: " + item.getItemName() + "\n" + LINE);
+                System.out.println("mark: " + item.getItemName() + "\n" + LINE);
             }
             else{
                 item.setDone(false);
@@ -80,18 +82,12 @@ public class TaskList {
 
         catch (Exception e){
             if (itemList.isEmpty()) {
-                System.out.println(LINE);
-                System.out.println("Please add an item before marking!");
-                System.out.println("What else do you want to do?");
-                System.out.println(LINE);
+                ui.showEmptyItemListError();
                 return;
             }
 
-            System.out.println(LINE);
-            System.out.println("Incorrect format for command \"setDone\" or \"unmark\"");
-            System.out.println("Correct format for command \"setDone\" is \"setDone {Positive Integer}\", max = " + (itemList.size()));
-            System.out.println("Correct format for command \"unmark\" is \"unmark {Positive Integer}\", max = " + (itemList.size()));
-            System.out.println("What else do you want to do?");
+            ui.showWrongMarkFormatError();
+
         }
     }
 
@@ -133,10 +129,7 @@ public class TaskList {
 
     public void showItemList() {
         if (itemList.isEmpty()){
-            System.out.println(LINE);
-            System.out.println("List is empty");
-            System.out.println(LINE);
-            return;
+            ui.showEmptyItemListError();
         }
         System.out.println(LINE);
         for (int i = 0; i < itemList.size(); i++) {
@@ -217,5 +210,15 @@ public class TaskList {
 
     public ArrayList<Item> getItemList() {
         return itemList;
+    }
+
+    public void findItem(String name){
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).getItemName().equals(name)) {
+                System.out.println(LINE);
+                System.out.println(i + 1 + ". " + itemList.get(i));
+                System.out.println(LINE);
+            }
+        }
     }
 }

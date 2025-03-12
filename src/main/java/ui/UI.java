@@ -1,21 +1,21 @@
 package ui;
 
-import diskio.Storage;
 import exception.RoboastException;
-import item.Item;
-import item.TaskList;
+import item.TaskManager;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class UI {
 
     private static final String BOT_NAME = "Roboast";
     private static final String LINE = "_".repeat(50);
 
-    public UI(){
+    private static TaskManager taskManager;
 
+    public UI(){}
+
+    public UI(TaskManager taskManager){
+        UI.taskManager = taskManager;
     }
 
     public static void printHello() {
@@ -51,7 +51,21 @@ public class UI {
         System.out.println(LINE);
         System.out.println("I don't understand this command");
         System.out.println("Please choose from the following commands: ");
-        System.out.println(Arrays.toString(TaskList.COMMAND_LIST));
+        System.out.println(Arrays.toString(TaskManager.COMMAND_LIST));
         System.out.println(LINE);
+    }
+
+    public static void showEmptyItemListError(){
+        System.out.println(LINE);
+        System.out.println("List is empty");
+        System.out.println(LINE);
+    }
+
+    public static void showWrongMarkFormatError(){
+        System.out.println(LINE);
+        System.out.println("Incorrect format for command \"mark\" or \"unmark\"");
+        System.out.println("Correct format for command \"mark\" is \"mark {Positive Integer}\", max = " + taskManager.getItemList().size());
+        System.out.println("Correct format for command \"unmark\" is \"unmark {Positive Integer}\", max = " + taskManager.getItemList().size());
+        System.out.println("What else do you want to do?");
     }
 }

@@ -1,7 +1,7 @@
 package main;
 
 import diskio.Storage;
-import item.TaskList;
+import item.TaskManager;
 import ui.RoboastParser;
 import ui.UI;
 
@@ -10,20 +10,20 @@ public class Roboast {
     private static final String LINE = "_".repeat(50);
 
     private UI ui;
-    private TaskList taskList;
+    private TaskManager taskManager;
     private RoboastParser roboastParser;
 
     public void start() {
 
-        taskList = new TaskList(Storage.loadFromCSV("./data/roboast.csv"));
-        ui = new UI();
-        roboastParser = new RoboastParser(taskList);
+        taskManager = new TaskManager(Storage.loadFromCSV("./data/roboast.csv"));
+        ui = new UI(taskManager);
+        roboastParser = new RoboastParser(taskManager);
 
         ui.printHello();
-        roboastParser.itemManage(taskList);
+        roboastParser.itemManage(taskManager);
         ui.printGoodbye();
 
-        Storage.saveToCSV("./data/roboast.csv", taskList.getItemList());
+        Storage.saveToCSV("./data/roboast.csv", taskManager.getItemList());
     }
 
 
