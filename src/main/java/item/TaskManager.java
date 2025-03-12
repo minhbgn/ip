@@ -5,17 +5,36 @@ import ui.UI;
 
 import java.util.ArrayList;
 
+/**
+ * Task Manager. Handles all the commands for Roboast. The central processing class for Roboast
+ */
 public class TaskManager {
+    /**
+     * LINE constant for ease when printing as it is repeatedly used throughout the project.
+     */
     private static final String LINE = "_".repeat(50);
+
+    /**
+     * COMMAND_LIST constant to show the legal commands for Roboast
+     */
     public static final String[] COMMAND_LIST = {"list","mark","unmark","todo","deadline","event","deleteAll","delete","find"};
 
     private UI ui = new UI();
     private final ArrayList<Item> itemList;
 
+    /**
+     * Filled Initializer for Task Manager
+     * @param itemList The list of items (Todo/ Event/ Deadline) of the user
+     */
     public TaskManager(ArrayList<Item> itemList) {
         this.itemList = itemList;
     }
 
+    /**
+     * Parse the command from the RoboastParser to meaningful functions
+     * @param input the input of the user, parsed through RoboastParser
+     * @throws RoboastException handles error related specifically to Roboast
+     */
     public void action(String input) throws RoboastException {
 
         String command;
@@ -63,9 +82,14 @@ public class TaskManager {
 
     }
 
-    public void mark(String content, boolean isDone) {
+    /**
+     * Mark the item as done or not done.
+     * @param itemNo The item number in the list
+     * @param isDone True to mark the item as done, False to mark the item as not done
+     */
+    public void mark(String itemNo, boolean isDone) {
         try{
-            int posInt = Integer.parseInt(content);
+            int posInt = Integer.parseInt(itemNo);
             Item item = itemList.get(posInt-1);
 
             if (isDone){
@@ -91,6 +115,10 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Add a Todo task into the list
+     * @param content name of the Todo task
+     */
     public void addTodo(String content) {
         if (content.isEmpty()){
             ui.showAddEmptyError();
@@ -103,6 +131,10 @@ public class TaskManager {
                 "You now have " + itemList.size() + " tasks\n" + LINE);
     }
 
+    /**
+     * Add a Deadline into the list
+     * @param content content of the Deadline including name and the date/time the task ends
+     */
     public void addDeadlines(String content) {
         if (content.isEmpty()){
             ui.showAddEmptyError();
@@ -115,6 +147,10 @@ public class TaskManager {
                 "You now have " + itemList.size() + " tasks\n" + LINE);
     }
 
+    /**
+     * Add an Event into the list
+     * @param content content of the Event including name and the date/time the event starts/ends
+     */
     public void addEvents(String content) {
         if (content.isEmpty()) {
             ui.showAddEmptyError();
@@ -127,6 +163,9 @@ public class TaskManager {
                 "You now have " + itemList.size() + " tasks\n" + LINE);
     }
 
+    /**
+     * Show all the items (todo/deadline/event) in the list.
+     */
     public void showItemList() {
         if (itemList.isEmpty()){
             ui.showEmptyItemListError();
@@ -138,6 +177,10 @@ public class TaskManager {
         System.out.println(LINE);
     }
 
+    /**
+     * Count how many task/deadline/event has finished
+     * @return the number of tasks/deadline/event that has finished
+     */
     public int countDone() {
         int i = 0;
         while (i < itemList.size()) {
@@ -148,6 +191,9 @@ public class TaskManager {
         return i;
     }
 
+    /**
+     * Delete all the items in the list that has been done
+     */
     public void deleteAll() {
 
         try{
@@ -179,14 +225,18 @@ public class TaskManager {
         System.out.println(LINE);
     }
 
-    public void delete(String content) {
+    /**
+     * Delete a specific item
+     * @param itemNo The item number in the list
+     */
+    public void delete(String itemNo) {
         try {
-            if (content.isEmpty()){
+            if (itemNo.isEmpty()){
                 throw new RoboastException("Errr I don't know what to delete");
             }
-            Integer.parseInt(content);
-            Item item = itemList.get(Integer.parseInt(content) - 1);
-            itemList.remove(Integer.parseInt(content) - 1);
+            Integer.parseInt(itemNo);
+            Item item = itemList.get(Integer.parseInt(itemNo) - 1);
+            itemList.remove(Integer.parseInt(itemNo) - 1);
             System.out.println(LINE);
             System.out.println("Item deleted successfully: " + item.getItemName() + "\n" + LINE);
         }
@@ -208,13 +258,21 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Get the whole item list, used when the information about the item list such as length/content, etc. are needed
+     * @return itemList the whole item list
+     */
     public ArrayList<Item> getItemList() {
         return itemList;
     }
 
+    /**
+     * Find a specific item in the list. List all the items that contains what needed to be found
+     * @param name the name of the item the user wants to find
+     */
     public void findItem(String name){
         for (int i = 0; i < itemList.size(); i++) {
-            if (itemList.get(i).getItemName().equals(name)) {
+            if (itemList.get(i).getItemName().contains(name)) {
                 System.out.println(LINE);
                 System.out.println(i + 1 + ". " + itemList.get(i));
                 System.out.println(LINE);

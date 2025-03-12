@@ -11,8 +11,15 @@ import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-
+/**
+ * This class is used to save all the information into the disk to be used later when Roboast is closed
+ */
 public class Storage {
+    /**
+     * Save all the data into a CSV file
+     * @param filename Name of the CSV file
+     * @param items The Item List containing all of the Item's information
+     */
     public static void saveToCSV(String filename, ArrayList<Item> items) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
             for (Item item : items) {
@@ -23,6 +30,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Load from the CSV file into the Item List
+     * @param filename The CSV file that data is extracted from
+     * @return the Item List containing all the information that was saved
+     */
     public static ArrayList<Item> loadFromCSV(String filename) {
         ArrayList<Item> items = new ArrayList<>();
         File file = new File(filename);

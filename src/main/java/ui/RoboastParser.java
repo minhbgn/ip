@@ -6,16 +6,25 @@ import item.TaskManager;
 
 import java.util.Scanner;
 
+/**
+ * This class is used to parse user's input to the Task Manager to perform functions
+ */
 public class RoboastParser {
 
     private TaskManager taskManager;
 
-    public RoboastParser(){}
-
+    /**
+     * Initializer for RoboastParser
+     * @param taskManager the Task Manager that performs every function. Given here to catch the input from the Parser
+     */
     public RoboastParser(TaskManager taskManager){
         this.taskManager = taskManager;
     }
 
+    /**
+     * Continously get the input from the user to perform task
+     * @param taskManager the Task Manager that performs every function. Given here to catch the input from the Parser
+     */
     public void itemManage(TaskManager taskManager) {
 
         Scanner sc = new Scanner(System.in);
