@@ -1,17 +1,20 @@
 package item;
 
+/**
+ * Used to hold Events
+ */
 public class Event extends Item{
 
     private String eventStartTime;
     private String eventEndTime;
 
-    public Event() {
-        super();
-        super.itemType = "Event";
-    }
-
-    public Event(String name, boolean done) {
-        super(name, done);
+    /**
+     * Initializer for Events
+     * @param name name of the Event
+     * @param isDone True if the Event has finished, False otherwise
+     */
+    public Event(String name, boolean isDone) {
+        super(name, isDone);
         String newname;
         newname = name.replace("/from","(from:")
                       .replace("/to","to:");
@@ -32,6 +35,10 @@ public class Event extends Item{
         super.itemType = "Event";
     }
 
+    /**
+     * For printing purposes
+     * @return The printing string
+     */
     @Override
     public String toString() {
         if (super.isDone){
@@ -42,6 +49,10 @@ public class Event extends Item{
         }
     }
 
+    /**
+     * Serialize the Item. This function is used for polymorphism
+     * @return The serialized Item in CSV format to save into CSV file
+     */
     @Override
     public String toCSVString(){
         return super.toCSVString();

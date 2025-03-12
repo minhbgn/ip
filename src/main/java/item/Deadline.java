@@ -1,17 +1,19 @@
 package item;
 
+/**
+ * This class holds Deadlines
+ */
 public class Deadline extends Item{
 
     private String deadline;
 
-    public Deadline(){
-
-        super();
-        super.itemType = "Deadline";
-    }
-
-    public Deadline(String name, boolean done){
-        super(name, done);
+    /**
+     * Initializer for Deadline items
+     * @param name name of the Deadline
+     * @param isDone True if the Deadline is done/passed, False otherwise
+     */
+    public Deadline(String name, boolean isDone){
+        super(name, isDone);
         String newname = name.replace("/by","(by:");
         int byIndex = newname.indexOf("(by:");
 
@@ -30,6 +32,10 @@ public class Deadline extends Item{
         super.itemType = "Deadline";
     }
 
+    /**
+     * For printing purposes
+     * @return the String that gets printed
+     */
     @Override
     public String toString(){
         if (super.isDone){
@@ -40,6 +46,10 @@ public class Deadline extends Item{
         }
     }
 
+    /**
+     * Serialize the Item. This function is used for polymorphism
+     * @return The serialized Item in CSV format to save into CSV file
+     */
     @Override
     public String toCSVString(){
         return super.toCSVString();
