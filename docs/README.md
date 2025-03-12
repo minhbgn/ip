@@ -1,30 +1,48 @@
-# main.Roboast User Guide
+# Roboast User Guide
 
-// Update the title above to match the actual product name
+Welcome to your Robo Assitance applicaiton. Here we - the assistance will help you manage all of your tasks, such as to do list, deadlines, and events with ease. Simply tell us what you want to do, and we will do just that!
 
-// Product screenshot goes here
+## List all the current items
 
-// Product intro goes here
+Syntax: list
 
-## Adding deadlines
+This will list all the current item in the list with their information such as done or not, Deadlines' deadline, Event's start and end data, etc.
 
-// Describe the action and its outcome.
+## Mark/unmark item
 
-// Give examples of usage
+Syntax: {mark/unmark} {item no}
 
-Example: `keyword (optional arguments)`
+Example: `mark 1`, `unmark 3`
 
-// A description of the expected outcome goes here
+mark will denote the item as finished and unmark will revert the status to unfinished
 
-```
-expected output
-```
+## Adding item
 
-## Feature ABC
+Syntax: {item type} {name of item}
+{item type} includes: todo, deadline, event
 
-// Feature details
+Example: `todo eat dinner`, `deadline do cs2113 project \by 2 March`
 
+Add the item into the item list
 
-## Feature XYZ
+## Delete all finished
 
-// Feature details
+Syntax: deleteAll
+
+Delete all the items denoted as finished from the list
+
+## Delete specific item
+
+Syntax: delete {item no}
+
+Delete the item with that number in the list
+
+## Find the item
+
+Syntax: find {item name}
+
+List all the item containing name
+
+## List out list of command
+
+Just type a random command, an error message will appear, but also the list of command!
